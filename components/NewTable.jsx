@@ -28,18 +28,19 @@ const DynamicTable = ({
   return (
     <div className="bg-white shadow rounded-lg min-w-[92vw] max-w-[92vw] overflow-x-scroll">
       {/* Table Headings */}
-      <div className="p-4 border-b border-gray-200">
-        {/* <h2 className="text-lg text-gray-700">{head}</h2> */}
-      </div>
+
       <div className=" w-full">
         <div className="flex items-center justify-between w-full p-4 border-b border-gray-200">
-          <div className="font-medium min-w-16 text-center text-gray-700 uppercase">
-            S No.
-          </div>
           {headings.map((heading, index) => (
             <div
               key={index}
-              className="font-medium min-w-40 text-center text-gray-700 uppercase"
+              className={`font-medium min-w-40 text-gray-700 uppercase ${
+                index == 0
+                  ? "text-left"
+                  : index == headings.length - 2
+                  ? "text-right"
+                  : "text-center"
+              }`}
             >
               {heading}
             </div>
@@ -52,12 +53,17 @@ const DynamicTable = ({
             key={rowIndex}
             className="flex items-center justify-between p-4 border-b border-gray-200 gap-4 text-sm"
           >
-            <div className={`min-w-16 text-center `}>{rowIndex + 1}</div>
             {Object.values(row).map((value, valueIndex) => (
               <div
                 key={valueIndex}
-                className={`min-w-40 text-center ${
+                className={`min-w-40 ${
                   valueIndex === 0 ? "flex items-center space-x-3" : ""
+                } ${
+                  valueIndex == 0
+                    ? "text-left"
+                    : valueIndex == headings.length - 2
+                    ? "text-right"
+                    : "text-center"
                 }`}
               >
                 {typeof value === "string" &&
@@ -127,7 +133,7 @@ const DynamicTable = ({
 
       {/* Pagination */}
       {pagination && (
-        <div className="flex justify-end py-4 space-x-2">
+        <div className="flex justify-end py-4 space-x-2 px-4">
           <button
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}

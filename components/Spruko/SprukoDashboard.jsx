@@ -168,7 +168,7 @@ const SprukoDashboard = () => {
   };
 
   return (
-    <div className="h-full w-full px-3 my-8">
+    <div className="flex flex-col gap-6 h-full w-full p-6">
       <div className="grid grid-cols-11 w-full gap-6">
         <SprukoCard
           title="Total Campaigns"
@@ -223,8 +223,8 @@ const SprukoDashboard = () => {
         {/* <SprukoActivityCard />
         <SprukoMixAreaChart /> */}
       </div>
-      <div className=" w-full flex flex-col items-start justify-start lg:px-8 px-1 gap-4 mt-10 py-5">
-        <p className=" text-oohpoint-primary-2 text-2xl">Recent Campaigns</p>
+      <div className="w-full space-y-2">
+        <p className="text-oohpoint-primary-2 text-2xl">Recent Campaigns</p>
         <DynamicTable
           headings={[
             "Campaign Name",

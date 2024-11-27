@@ -19,7 +19,6 @@ const MyProvider = ({ children }) => {
   useEffect(() => {
     // Check if user is already logged in
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      console.log(user)
       if (!user) {
         toast.error("Log in first");
         router.push("/sign-in"); // Adjust the route as per your application

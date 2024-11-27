@@ -15,19 +15,17 @@ const Header = () => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      console.log(user)
       if (!user) {
         // User is already logged in, redirect to dashboard
         toast.error("Log in first");
         router.push("/sign-in"); // Adjust the route as per your application
       }
-      console.log(user)
+      console.log(user);
     });
 
     // Clean up subscription on unmount
     return () => unsubscribe();
   }, [router]);
-
 
   return (
     <div className=" min-h-[4rem] w-full flex justify-between items-center py-4 md:px-12 px-2 gap-4 bg-white">
@@ -40,14 +38,13 @@ const Header = () => {
         </select>
       </div> */}
       <RxHamburgerMenu
-          onClick={() => {
-            setIsOpen((prev) => !prev);
-            setIsHovered((prev) => !prev);
-          }}
-          className=" text-3xl block text-oohpoint-grey-300"
-        />
+        onClick={() => {
+          setIsOpen((prev) => !prev);
+          setIsHovered((prev) => !prev);
+        }}
+        className=" text-3xl block text-oohpoint-grey-300"
+      />
       <div className="flex gap-2 items-center justify-around sm:justify-center sm:gap-8 sm:w-auto w-full">
-        
         {/* <div
           onClick={() => router.push("/notifications")}
           className=" relative cursor-pointer"
@@ -67,7 +64,9 @@ const Header = () => {
             <div className=" absolute top-0 right-0 size-4 bg-green-500 rounded-full border-2 border-white"></div>
           </div>
           <div className=" flex flex-col justify-center items-start">
-            <p className=" font-bold text-lg text-oohpoint-primary-1">{user?.name}</p>
+            <p className=" font-bold text-lg text-oohpoint-primary-1">
+              {user?.name}
+            </p>
             <p className=" text-[0.9rem] text-oohpoint-grey-300 font-light">
               {user?.email}
             </p>
