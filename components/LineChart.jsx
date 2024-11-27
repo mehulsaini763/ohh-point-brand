@@ -14,7 +14,7 @@ import {
 } from "recharts";
 
 const SimpleLineChart = ({ head, Icon, data }) => (
-  <div className="min-w-[18rem] w-[30%] bg-white rounded-lg flex flex-col justify-center items-center px-2">
+  <div className="min-w-[18rem] col-span-2 bg-white rounded-lg flex flex-col justify-center items-center px-2">
     <div className="px-5 pt-10 pb-8 flex justify-between items-start w-full">
       <div className="flex flex-col justify-start items-start gap-2">
         <h4 className="text-oohpoint-primary-2 font-medium">{head}</h4>

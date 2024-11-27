@@ -23,19 +23,19 @@ const Campaigns = () => {
 
     if (currentDate < start) {
       return (
-        <div className="text-xs py-1 px-2 bg-yellow-300 text-yellow-700 rounded-md w-fit font-semibold">
+        <div className="text-sm py-1 px-2 bg-yellow-300 text-yellow-700 rounded-md w-fit font-semibold">
           Upcoming
         </div>
       ); // Before start date
     } else if (currentDate > end) {
       return (
-        <div className="text-xs py-1 px-2 bg-neutral-300 text-neutral-700 rounded-md w-fit font-semibold">
+        <div className="text-sm py-1 px-2 bg-neutral-300 text-neutral-700 rounded-md w-fit font-semibold">
           Closed
         </div>
       ); // After end date
     } else {
       return (
-        <div className="text-xs py-1 px-2 bg-green-300 text-green-700 rounded-md w-fit font-semibold">
+        <div className="text-sm py-1 px-2 bg-green-300 text-green-700 rounded-md w-fit font-semibold">
           Active
         </div>
       ); // Between start and end dates
@@ -68,13 +68,17 @@ const Campaigns = () => {
       accessorKey: "startDate",
       header: "start Date",
       cell: ({ row }) =>
-        moment.unix(row.getValue("startDate")?.seconds).format("DD/MM/YY"),
+        moment
+          .unix(row.getValue("startDate")?.seconds)
+          .format("DD/MM/YY hh:mm A"),
     },
     {
       accessorKey: "endDate",
       header: "end Date",
       cell: ({ row }) =>
-        moment.unix(row.getValue("endDate")?.seconds).format("DD/MM/YY"),
+        moment
+          .unix(row.getValue("endDate")?.seconds)
+          .format("DD/MM/YY hh:mm A"),
     },
     {
       accessorKey: "status",
@@ -142,7 +146,7 @@ const Campaigns = () => {
                   {row.getVisibleCells().map((cell, i) => (
                     <td
                       key={cell.id}
-                      className={`p-4 text-sm ${
+                      className={`p-4 ${
                         i != columns.length - 2 ? "text-left" : "text-right"
                       }`}
                     >

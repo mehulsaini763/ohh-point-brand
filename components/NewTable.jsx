@@ -81,7 +81,7 @@ const DynamicTable = ({
                   </button>
                 ) : typeof value === "string" &&
                   value.includes("https://user-ooh-point.vercel.app") ? (
-                  <QRCodeGenerator value={value} />
+                  <QRCodeGenerator value={value} /> 
                 ) : typeof value === "string" && value.includes("View") ? (
                   <div
                     className="cursor-pointer text-purple-500"

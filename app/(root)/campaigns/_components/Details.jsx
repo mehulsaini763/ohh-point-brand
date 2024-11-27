@@ -84,103 +84,94 @@ const CampaignDetail = ({ data }) => {
         </button>
       </div>
       {open && (
-        <div className="absolute inset-0 bg-white/25 p-8 z-10 h-screen overflow-hidden">
+        <div className="absolute inset-0 bg-black/50 backdrop-blur-sm p-8 z-10 h-screen overflow-hidden">
           <button
             className="absolute top-4 right-4 bg-white shadow-lg p-4 rounded-lg border"
             onClick={() => setOpen(false)}
           >
             <X size={24} />
           </button>
-          <div className="bg-oohpoint-grey-200 p-6 rounded-lg h-full overflow-y-auto">
-            <div className="flex flex-col gap-6">
-              {/* Campaign Overview Cards */}
-              <div className="w-full flex flex-wrap lg:justify-between justify-around items-center gap-4 lg:gap-2 mb-4">
-                <GradientBarChart
-                  head="Distribution of Scans"
-                  count={`+${data.ipAddress?.length || 0}`}
-                  Icon={true}
-                  data={monthlyScans}
-                  darkColor="#B77DC4"
-                  lightColor="#F7D5FF"
-                />
-                <SimpleLineChart
-                  head="Hourly Distribution of Scans"
-                  count={`+${data.ipAddress?.length || 0}`}
-                  Icon={true}
-                  data={hourlyScansData}
-                />
-                <div className=" flex flex-col gap-4 w-[30%] min-w-[18rem]">
-                  <Card
-                    head="Total Scans"
-                    count={`+${data.ipAddress?.length || 0}`}
-                    Icon={MdQrCodeScanner}
-                    info="+22 from last month"
-                    bgColor="green"
-                  />
-                  <Card
-                    head="Unique Scans"
-                    count={`+${data.locationIp?.length || 0}`}
-                    Icon={IoMdQrScanner}
-                    info="-64 from last month"
-                    bgColor="red"
-                  />
-                </div>
-              </div>
+          <div className="flex flex-col gap-6 bg-oohpoint-grey-200 p-6 rounded-lg h-full overflow-y-auto">
+            {/* Campaign Overview Cards */}
+            <div className="grid md:grid-cols-4 gap-6">
+              <Card
+                head="Total Scans"
+                count={`+${data.ipAddress?.length || 0}`}
+                Icon={MdQrCodeScanner}
+                info="+22 from last month"
+                bgColor="green"
+              />
+              <Card
+                head="Unique Scans"
+                count={`+${data.locationIp?.length || 0}`}
+                Icon={IoMdQrScanner}
+                info="-64 from last month"
+                bgColor="red"
+              />
+              <Card
+                head="Total Redirects"
+                count={`+${data.redirects || 0}`}
+                Icon={MdOutlineFormatTextdirectionRToL}
+                info="+22"
+              />
+              <Card
+                head="Total Investment"
+                count={`Rs. ${data.campaignBudget}`}
+                Icon={MdMoney}
+              />
+            </div>
 
-              <div className="w-full flex flex-wrap lg:justify-between justify-around items-center gap-4 lg:gap-2 mb-4">
-                {locations.length > 0 && <MapLocation locations={locations} />}
-                <CampaignCompletionCircle
-                  completedPercentage={
-                    (data.locationIp?.length / data.moq) * 100 || 0
-                  }
-                />
-                <div className=" flex flex-col gap-4 w-[30%] min-w-[18rem]">
-                  <Card
-                    head="Total Redirects"
-                    count={`+${data.redirects || 0}`}
-                    Icon={MdOutlineFormatTextdirectionRToL}
-                    info="+22"
-                  />
-                  <Card
-                    head="Total Investment"
-                    count={`Rs. ${data.campaignBudget}`}
-                    Icon={MdMoney}
-                  />
-                </div>
-              </div>
+            <div className="grid md:grid-cols-6 gap-6">
+              <GradientBarChart
+                head="Distribution of Scans"
+                count={`+${data.ipAddress?.length || 0}`}
+                Icon={true}
+                data={monthlyScans}
+                darkColor="#B77DC4"
+                lightColor="#F7D5FF"
+              />
+              <CampaignCompletionCircle
+                completedPercentage={
+                  (data.locationIp?.length / data.moq) * 100 || 0
+                }
+              />
+              <SimpleLineChart
+                head="Hourly Distribution of Scans"
+                count={`+${data.ipAddress?.length || 0}`}
+                Icon={true}
+                data={hourlyScansData}
+              />
+              {locations.length > 0 && <MapLocation locations={locations} />}
+            </div>
 
-              {/* State-wise Distribution (Pie chart + Table) */}
-              <div className="flex justify-center items-center gap-8 flex-col bg-white  rounded-lg w-full px-16 py-8">
-                <h2 className="text-xl w-full text-oohpoint-primary-2 text-left">
-                  State-wise distribution
-                </h2>
-                <div className="flex justify-between gap-4 items-start w-full">
-                  <div className="rounded-3xl w-1/3 h-full border border-oohpoint-grey-300 bg-oohpoint-grey-200 text-oohpoint-grey-300">
-                    {data.cities && (
-                      <table className=" w-full border-collapse">
-                        <thead>
-                          <tr className=" border-b  border-primary p-4">
-                            <th className=" p-4 text-start">States</th>
-                            <th className=" p-4 text-start">Scans</th>
+            <div className="flex justify-center items-center gap-8 flex-col bg-white rounded-lg w-full p-8">
+              <h2 className="text-xl w-full text-oohpoint-primary-2 text-left">
+                State-wise distribution
+              </h2>
+              <div className="flex justify-between gap-4 items-start w-full">
+                <div className="rounded-3xl w-1/3 h-full border border-oohpoint-grey-300 bg-oohpoint-grey-200 text-oohpoint-grey-300">
+                  {data.cities && (
+                    <table className=" w-full border-collapse">
+                      <thead>
+                        <tr className=" border-b  border-primary p-4">
+                          <th className=" p-4 text-start">States</th>
+                          <th className=" p-4 text-start">Scans</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {Object.entries(data.cities).map(([key, value], i) => (
+                          <tr className={` p-4`}>
+                            <td className=" p-4 text-start">{key}</td>
+                            <td className=" p-4 text-start">{value}</td>
                           </tr>
-                        </thead>
-                        <tbody>
-                          {Object.entries(data.cities).map(
-                            ([key, value], i) => (
-                              <tr className={` p-4`}>
-                                <td className=" p-4 text-start">{key}</td>
-                                <td className=" p-4 text-start">{value}</td>
-                              </tr>
-                            )
-                          )}
-                        </tbody>
-                      </table>
-                    )}
-                  </div>
+                        ))}
+                      </tbody>
+                    </table>
+                  )}
+                </div>
 
-                  <div className="w-1/2 h-full bg-white flex p-4 rounded-xl justify-center items-center">
-                    {data.cities && <PieChartNew data={data.cities} />}
-                  </div>
+                <div className="w-1/2 h-full bg-white flex p-4 rounded-xl justify-center items-center">
+                  {data.cities && <PieChartNew data={data.cities} />}
                 </div>
               </div>
             </div>

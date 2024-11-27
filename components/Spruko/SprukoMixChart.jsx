@@ -94,7 +94,7 @@ const SprukoMixChart = () => {
   );
 
   return (
-    <div className="bg-white text-xs shadow rounded-lg col-span-11 row-span-5 xl:col-span-5 lg:col-span-8 min-w-[15rem]">
+    <div className="bg-white text-xs shadow rounded-lg col-span-2 row-span-2 min-w-[15rem]">
       <div className="p-4 border-b border-gray-200">
         <h2 className="text-lg">Campaign Status Overview</h2>
       </div>

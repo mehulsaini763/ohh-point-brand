@@ -14,7 +14,7 @@ const SprukoCard = ({
   lineColor,
 }) => {
   return (
-    <div className="p-4 bg-white shadow rounded-lg col-span-11 min-w-[12rem] xl:col-span-2 lg:col-span-7 row-span-2">
+    <div className="p-4 bg-white shadow rounded-lg min-w-[12rem]">
       <div className="flex items-start justify-between h-full">
         <div className="flex items-start gap-4 flex-col">
           <div className={`p-2 rounded-full text-2xl ${iconColor} ${bgColor}`}>

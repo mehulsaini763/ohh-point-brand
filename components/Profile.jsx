@@ -9,7 +9,7 @@ const Profile = () => {
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
   const inputClassName =
-    "mt-1 block w-full rounded-3xl py-1 px-4 bg-oohpoint-grey-200 font-light w-[20rem]";
+    "mt-1 block w-full rounded-md py-2 px-4 bg-oohpoint-grey-200 font-light w-[20rem]";
   return (
     <div className="bg-oohpoint-grey-200 w-full h-full flex flex-col gap-6 p-6">
       <div className=" flex justify-between items-center w-full">
@@ -28,25 +28,23 @@ const Profile = () => {
           Change Password
         </button>
       </div>
-      <div className="bg-white h-full p-6 px-10 rounded-lg w-full flex gap-4 justify-around items-center">
-        <div className="mb-4 flex flex-col items-center">
-          {/* Profile Image */}
-          <div className="size-48 mb-4 relative">
-            {user?.imageUrl ? (
-              <img
-                className="w-full h-full object-cover rounded-full shadow-lg"
-                src={user?.imageUrl}
-                alt="Profile"
-              />
-            ) : (
-              <div className="w-full h-full bg-gray-200 rounded-full" />
-            )}
-          </div>
+      <div className="bg-white h-full p-6 rounded-lg w-full flex flex-col gap-6">
+        {/* Profile Image */}
+        <div className="size-36 mb-4 relative">
+          {user?.imageUrl ? (
+            <img
+              className="w-full h-full object-cover rounded-lg shadow-lg"
+              src={user?.imageUrl}
+              alt="Profile"
+            />
+          ) : (
+            <div className="w-full h-full bg-gray-200 rounded-lg" />
+          )}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid md:grid-cols-2 gap-6">
           {/* Name of POC */}
-          <div className="mb-4">
+          <div>
             <label className="block text-oohpoint-primary-2 text-lg">
               Name of POC:
             </label>
@@ -59,7 +57,7 @@ const Profile = () => {
           </div>
 
           {/* Email */}
-          <div className="mb-4">
+          <div>
             <label className="block text-oohpoint-primary-2 text-lg">
               Email:
             </label>
@@ -72,7 +70,7 @@ const Profile = () => {
           </div>
 
           {/* Subscription */}
-          <div className="mb-4">
+          <div>
             <label className="block text-oohpoint-primary-2 text-lg">
               Subscription
             </label>
@@ -91,7 +89,7 @@ const Profile = () => {
           </div>
 
           {/* Business Name */}
-          <div className="mb-4">
+          <div>
             <label className="block text-oohpoint-primary-2 text-lg">
               Business Name:
             </label>
@@ -102,7 +100,7 @@ const Profile = () => {
               disabled
             />
           </div>
-          <div className="mb-4">
+          <div>
             <label className="block text-oohpoint-primary-2 text-lg">
               Brand Name:
             </label>
@@ -114,7 +112,7 @@ const Profile = () => {
             />
           </div>
           {/* Brand ID */}
-          <div className="mb-4">
+          <div>
             <label className="block text-oohpoint-primary-2 text-lg">
               Brand ID:
             </label>

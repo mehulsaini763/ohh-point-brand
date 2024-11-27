@@ -5,7 +5,7 @@ const CampaignCompletionCircle = ({ completedPercentage }) => {
   const validCompletedPercentage = Math.min(100, Math.max(0, completedPercentage)); // Ensure percentage is between 0-100
 
   return (
-    <div className="flex justify-center items-center p-4 bg-white rounded-lg h-full w-[30%] min-w-[18rem]">
+    <div className="flex justify-center items-center p-4 bg-white rounded-lg h-full">
       <div className="relative">
         {/* Circle background */}
         <svg className="w-40 h-40">

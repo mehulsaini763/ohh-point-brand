@@ -19,7 +19,7 @@ const GradientBarChart = ({ lightColor, darkColor, head, count, Icon, data }) =>
   const gradientId = `gradient-${Math.random().toString(36).substr(2, 9)}`;
 
   return (
-    <div className="min-w-[18rem] w-[30%] bg-white rounded-lg flex flex-col justify-center items-center px-2">
+    <div className="bg-white rounded-lg flex flex-col justify-center items-center px-2">
       <div className="px-5 pt-8 pb-6 flex justify-between items-start w-full">
         <div className="flex flex-col justify-start items-start gap-2">
           <h4 className="text-oohpoint-primary-2 font-medium">{head}</h4>

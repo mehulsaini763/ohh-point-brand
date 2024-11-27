@@ -1,17 +1,22 @@
 "use client";
 import React, { useContext, useEffect, useState } from "react";
 import SprukoCard from "./SprukoCard";
-import { MdCampaign, MdOutlineCampaign } from "react-icons/md";
+import { MdCampaign } from "react-icons/md";
 import { AiOutlineStock } from "react-icons/ai";
-import { IoIosCheckmarkCircleOutline } from "react-icons/io";
 import { MyContext } from "@/context/MyContext";
 import SprukoPieChart from "./SprukoPieChart";
 import SprukoMixChart from "./SprukoMixChart";
-import SprukoActivityCard from "./SprukoActivityCard";
-import SprukoMixAreaChart from "./SprukoMixAreaChart";
-import SprukoTable from "./SprukoTable";
 import DynamicTable from "../NewTable";
 import dynamic from "next/dynamic";
+import {
+  flexRender,
+  getCoreRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
+import QRCodeGenerator from "../QRCode";
+import Image from "next/image";
+import moment from "moment";
+import Details from "@/app/(root)/campaigns/_components/Details";
 
 const MapLocation = dynamic(() => import("../MapLocation"), {
   ssr: false, // This will disable server-side rendering for the map
@@ -140,36 +145,119 @@ const SprukoDashboard = () => {
     const end = new Date(endDate.seconds * 1000).setHours(0, 0, 0, 0); // End date
 
     if (currentDate < start) {
-      return "Upcoming"; // Before start date
+      return (
+        <div className="text-sm py-1 px-2 bg-yellow-300 text-yellow-700 rounded-md w-fit font-semibold">
+          Upcoming
+        </div>
+      ); // Before start date
     } else if (currentDate > end) {
-      return "Closed"; // After end date
+      return (
+        <div className="text-sm py-1 px-2 bg-neutral-300 text-neutral-700 rounded-md w-fit font-semibold">
+          Closed
+        </div>
+      ); // After end date
     } else {
-      return "Active"; // Between start and end dates
+      return (
+        <div className="text-sm py-1 px-2 bg-green-300 text-green-700 rounded-md w-fit font-semibold">
+          Active
+        </div>
+      ); // Between start and end dates
     }
   };
 
-  const transformCampaignsData = (campaigns) => {
-    return campaigns.map((campaign) => ({
-      campaign: {
-        name: campaign.campaignName || "N/A",
-        img: campaign.adCreative || "",
-      },
-      id: campaign.campaignId || "N/A", // Campaign ID
-      impressions: campaign.ipAddress?.length || 0, // Assuming impressions are based on ipAddress
-      startDate:
-        new Date(campaign.startDate.seconds * 1000).toLocaleDateString() ||
-        "N/A", // Start Date
-      endDate:
-        new Date(campaign.endDate.seconds * 1000).toLocaleDateString() || "N/A", // End Date
-      status: getStatus(campaign.startDate, campaign.endDate), // Status
-      // budgetAllocated: `Rs. ${campaign.campaignBudget || 0}`, // Budget Allocated
-      qr: `https://user-ooh-point.vercel.app/campaign/${campaign.campaignId}-${user.vendorId}`, // QR Code
-    }));
-  };
+  // const transformCampaignsData = (campaigns) => {
+  //   return campaigns.map((campaign) => ({
+  //     campaign: {
+  //       name: campaign.campaignName || "N/A",
+  //       img: campaign.adCreative || "",
+  //     },
+  //     id: campaign.campaignId || "N/A", // Campaign ID
+  //     impressions: campaign.ipAddress?.length || 0, // Assuming impressions are based on ipAddress
+  //     startDate:
+  //       new Date(campaign.startDate.seconds * 1000).toLocaleDateString() ||
+  //       "N/A", // Start Date
+  //     endDate:
+  //       new Date(campaign.endDate.seconds * 1000).toLocaleDateString() || "N/A", // End Date
+  //     status: getStatus(campaign.startDate, campaign.endDate), // Status
+  //     // budgetAllocated: `Rs. ${campaign.campaignBudget || 0}`, // Budget Allocated
+  //     qr: `https://user-ooh-point.vercel.app/campaign/${campaign.campaignId}-${user.vendorId}`, // QR Code
+  //   }));
+  // };
+
+  const columns = [
+    { accessorKey: "id", header: "campaign id" },
+    {
+      accessorKey: "campaignName",
+      header: "campaign name",
+      cell: ({ row }) => (
+        <div className="flex items-center gap-2">
+          <Image
+            src={row.original?.adCreative || ""}
+            width={32}
+            height={32}
+            alt="img"
+          />
+          {row.getValue("campaignName") || "N/A"}
+        </div>
+      ),
+    },
+    {
+      accessorKey: "ipAddress",
+      header: "impressions",
+      cell: ({ row }) => row.getValue("ipAddress")?.length || 0,
+    },
+    {
+      accessorKey: "startDate",
+      header: "start Date",
+      cell: ({ row }) =>
+        moment
+          .unix(row.getValue("startDate")?.seconds)
+          .format("DD/MM/YY hh:mm A"),
+    },
+    {
+      accessorKey: "endDate",
+      header: "end Date",
+      cell: ({ row }) =>
+        moment
+          .unix(row.getValue("endDate")?.seconds)
+          .format("DD/MM/YY hh:mm A"),
+    },
+    {
+      accessorKey: "status",
+      header: "status",
+      cell: ({ row }) => (
+        <div className="text-center">
+          {getStatus(row.getValue("startDate"), row.getValue("endDate"))}
+        </div>
+      ),
+    },
+    {
+      header: "qr code",
+      cell: ({ row }) => (
+        <div className="flex justify-end">
+          <QRCodeGenerator
+            value={`https://user-ooh-point.vercel.app/campaign/${row.original.campaignId}
+          )}-${user.vendorId}`}
+          />
+        </div>
+      ),
+    },
+    {
+      accessorKey: "actions",
+      header: "",
+      cell: ({ row }) => <Details data={row.original} />,
+    },
+  ];
+
+  const table = useReactTable({
+    data: campaigns,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+  });
 
   return (
     <div className="flex flex-col gap-6 h-full w-full p-6">
-      <div className="grid grid-cols-11 w-full gap-6">
+      <div className="grid md:grid-cols-4 w-full gap-6">
         <SprukoCard
           title="Total Campaigns"
           value={campaignsData.total}
@@ -180,28 +268,6 @@ const SprukoDashboard = () => {
           bgColor="bg-purple-100"
           lineData={campaignsData.lineData}
           lineColor="purple"
-        />
-        <SprukoCard
-          title="Total Scans"
-          value={totalScansData.total}
-          increase={`+${totalScansData.increase}`}
-          color="text-green-500"
-          iconColor="text-orange-500"
-          Icon={MdOutlineCampaign}
-          bgColor="bg-orange-100"
-          lineData={totalScansData.lineData}
-          lineColor="orange"
-        />
-        <SprukoCard
-          title="Unique Scans"
-          value={uniqueScansData.total}
-          increase={`+${uniqueScansData.increase}`}
-          color="text-green-500"
-          iconColor="text-green-500"
-          Icon={IoIosCheckmarkCircleOutline}
-          bgColor="bg-green-100"
-          lineData={uniqueScansData.lineData}
-          lineColor="green"
         />
         <SprukoCard
           title="Total Budget"
@@ -220,12 +286,10 @@ const SprukoDashboard = () => {
         />
         <SprukoMixChart campaign={campaigns} />
         <MapLocation locations={locations} />
-        {/* <SprukoActivityCard />
-        <SprukoMixAreaChart /> */}
       </div>
       <div className="w-full space-y-2">
         <p className="text-oohpoint-primary-2 text-2xl">Recent Campaigns</p>
-        <DynamicTable
+        {/* <DynamicTable
           headings={[
             "Campaign Name",
             "Campaign ID",
@@ -233,14 +297,80 @@ const SprukoDashboard = () => {
             "Start Date",
             "End Date",
             "Status",
-            // "Budget Allocated",
             "QR Code",
           ]}
           data={transformCampaignsData(campaigns)}
           rowsPerPage={4}
           pagination={false}
-        />
+        /> */}
+        <div className="w-full overflow-x-auto rounded-lg">
+          {campaigns.length == 0 ? (
+            <div className="h-48 bg-white flex flex-col justify-center items-center">
+              No Data Available
+            </div>
+          ) : (
+            <table className="bg-white rounded-lg shadow-sm w-full ">
+              <thead>
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <tr key={headerGroup.id}>
+                    {headerGroup.headers.map((header, i) => (
+                      <th
+                        key={header.id}
+                        className={`uppercase p-4 border-b font-medium text-neutral-700 ${
+                          i != columns.length - 2 ? "text-left" : "text-right"
+                        }`}
+                      >
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                      </th>
+                    ))}
+                  </tr>
+                ))}
+              </thead>
+              <tbody>
+                {table.getRowModel().rows.map((row) => (
+                  <tr key={row.id}>
+                    {row.getVisibleCells().map((cell, i) => (
+                      <td
+                        key={cell.id}
+                        className={`p-4 ${
+                          i != columns.length - 2 ? "text-left" : "text-right"
+                        }`}
+                      >
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+              <tfoot>
+                {table.getFooterGroups().map((footerGroup) => (
+                  <tr key={footerGroup.id}>
+                    {footerGroup.headers.map((header) => (
+                      <th key={header.id}>
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.footer,
+                              header.getContext()
+                            )}
+                      </th>
+                    ))}
+                  </tr>
+                ))}
+              </tfoot>
+            </table>
+          )}
+        </div>
       </div>
+      <div className="p-1" />
     </div>
   );
 };

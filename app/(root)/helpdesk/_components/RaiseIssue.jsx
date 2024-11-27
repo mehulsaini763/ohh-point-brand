@@ -1,16 +1,19 @@
 import { MyContext } from "@/context/MyContext";
 import { db } from "@/firebase";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
+import { Loader2 } from "lucide-react";
 import { useContext, useState } from "react";
 import toast from "react-hot-toast";
 
-const ModalCreateIssue = () => {
+const ModalCreateIssue = ({ refresh }) => {
   const { user } = useContext(MyContext);
   const [open, setOpen] = useState(false);
   const [category, setCategory] = useState("");
   const [issueMessage, setIssueMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmitIssue = async () => {
+    setLoading(true);
     if (!issueMessage || !category) {
       toast.error("Please fill out all the fields.");
       return;
@@ -39,11 +42,12 @@ const ModalCreateIssue = () => {
       setOpen(false);
       setIssueMessage("");
       setCategory("");
-      fetchQueries();
+      refresh();
     } catch (error) {
       console.error("Error submitting issue:", error);
       toast.error("Failed to submit issue. Please try again.");
     }
+    setLoading(false);
   };
 
   return (
@@ -55,7 +59,7 @@ const ModalCreateIssue = () => {
         Raise an Issue
       </button>
       {open && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center transition-all">
+        <div className="fixed inset-0 bg-black/50 z-10 flex justify-center items-center transition-all backdrop-blur-sm">
           <div className="bg-white p-6 px-10 rounded-2xl shadow-lg w-full max-w-md">
             <h2 className="text-lg font-bold mb-4">Raise an Issue</h2>
 
@@ -87,13 +91,16 @@ const ModalCreateIssue = () => {
                   setIssueMessage("");
                   setCategory("");
                 }}
+                disabled={loading}
               >
                 Cancel
               </button>
               <button
-                className="bg-oohpoint-primary-2 text-white py-2 px-6 rounded-xl hover:bg-oohpoint-primary-3"
+                className="flex items-center gap-2 bg-oohpoint-primary-2 text-white py-2 px-6 rounded-xl hover:bg-oohpoint-primary-3"
                 onClick={handleSubmitIssue}
+                disabled={loading}
               >
+                {loading && <Loader2 color="white" className="animate-spin" />}{" "}
                 Submit
               </button>
             </div>

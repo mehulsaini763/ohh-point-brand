@@ -49,35 +49,31 @@ const HelpDesk = () => {
     {
       id: "id",
       accessorKey: "queryId",
-      header: "query id",
-    },
-    {
-      accessorKey: "customerName",
-      header: "brand",
+      header: <div className="text-left">query id</div>,
     },
     {
       accessorKey: "category",
-      header: "category",
-    },
-    {
-      accessorKey: "createdAt",
-      header: "date",
-      cell: ({ row }) =>
-        moment.unix(row.getValue("createdAt")?.seconds || 0).format("DD/MM/YY"),
+      header: <div className="mx-auto">category</div>,
+      cell: ({ row }) => (
+        <div className="mx-auto text-center">{row.getValue("category")}</div>
+      ),
     },
     {
       accessorKey: "status",
       header: "status",
       cell: ({ row }) => {
         const status = row.getValue("status");
-        const color = ["Opened", "Reopened"].includes(status)
-          ? "bg-yellow-300 text-yellow-700"
-          : status == "Resolved"
-          ? "bg-green-300 text-green-700"
-          : "bg-neutral-300 text-neutral-700";
+        const color =
+          status == "Opened"
+            ? "bg-yellow-300 text-yellow-700"
+            : status == "Reopened"
+            ? "bg-orange-300 text-orange-700"
+            : status == "Resolved"
+            ? "bg-green-300 text-green-700"
+            : "bg-neutral-300 text-neutral-700";
         return (
           <div
-            className={`${color} py-1 px-2 rounded-lg w-fit ml-auto text-xs font-semibold`}
+            className={`${color} py-1 px-2 rounded-lg w-fit text-sm font-semibold mx-auto`}
           >
             {status}
           </div>
@@ -85,9 +81,22 @@ const HelpDesk = () => {
       },
     },
     {
+      accessorKey: "createdAt",
+      header: <div className="text-right">date</div>,
+      cell: ({ row }) => (
+        <div className="text-right">
+          {moment
+            .unix(row.getValue("createdAt")?.seconds || 0)
+            .format("DD/MM/YY hh:mm A")}
+        </div>
+      ),
+    },
+    {
       accessorKey: "action",
       header: "",
-      cell: ({ row }) => <ModalDetails data={row.original} />,
+      cell: ({ row }) => (
+        <ModalDetails data={row.original} refresh={fetchQueries} />
+      ),
     },
   ];
 
@@ -109,14 +118,14 @@ const HelpDesk = () => {
         <div className="flex items-center justify-between gap-4">
           <input
             type="text"
-            placeholder="Search"
+            placeholder="Search by Category"
             className="px-4 py-2 rounded-lg"
-            value={table.getColumn("id")?.getFilterValue() ?? ""}
+            value={table.getColumn("category")?.getFilterValue() ?? ""}
             onChange={(event) =>
-              table.getColumn("id")?.setFilterValue(event.target.value)
+              table.getColumn("category")?.setFilterValue(event.target.value)
             }
           />
-          <ModalCreateIssue />
+          <ModalCreateIssue refresh={fetchQueries} />
         </div>
       </div>
       {!data ? (
@@ -132,9 +141,7 @@ const HelpDesk = () => {
                   {headerGroup.headers.map((header, i) => (
                     <th
                       key={header.id}
-                      className={`uppercase p-4 border-b font-medium text-neutral-700 ${
-                        i != columns.length - 2 ? "text-left" : "text-right"
-                      }`}
+                      className="uppercase p-4 border-b font-medium text-neutral-700"
                     >
                       {header.isPlaceholder
                         ? null
@@ -151,12 +158,7 @@ const HelpDesk = () => {
               {table.getRowModel().rows.map((row) => (
                 <tr key={row.id}>
                   {row.getVisibleCells().map((cell, i) => (
-                    <td
-                      key={cell.id}
-                      className={`p-4 text-sm ${
-                        i != columns.length - 2 ? "text-left" : "text-right"
-                      }`}
-                    >
+                    <td key={cell.id} className="p-4">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
