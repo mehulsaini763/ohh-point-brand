@@ -21,9 +21,11 @@ const SprukoCard = ({
             <Icon />
           </div>
           <p className="text-2xl">{value}</p>
-          <p className={`text-sm ${color}`}>
-            {increase} <span className=" text-gray-400">Increased</span>
-          </p>
+          {increase && (
+            <p className={`text-sm ${color}`}>
+              {increase} <span className=" text-gray-400">Increased</span>
+            </p>
+          )}
         </div>
         <div className="text-right flex flex-col items-center justify-between h-full">
           <p className=" text-gray-400 text-sm">{title}</p>

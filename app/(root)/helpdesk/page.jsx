@@ -9,6 +9,7 @@ import {
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
+  getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import { Loader2 } from "lucide-react";
@@ -43,7 +44,10 @@ const HelpDesk = () => {
   }, [user]);
 
   const [data, setData] = useState(null);
-  const [columnFilters, setColumnFilters] = useState([]);
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 4,
+  });
 
   const columns = [
     {
@@ -73,7 +77,7 @@ const HelpDesk = () => {
             : "bg-neutral-300 text-neutral-700";
         return (
           <div
-            className={`${color} py-1 px-2 rounded-lg w-fit text-sm font-semibold mx-auto`}
+            className={`${color} uppercase py-1 px-2 rounded-lg w-fit text-sm font-semibold mx-auto`}
           >
             {status}
           </div>
@@ -87,7 +91,7 @@ const HelpDesk = () => {
         <div className="text-right">
           {moment
             .unix(row.getValue("createdAt")?.seconds || 0)
-            .format("DD/MM/YY hh:mm A")}
+            .format("DD/MM/YY")}
         </div>
       ),
     },
@@ -103,11 +107,12 @@ const HelpDesk = () => {
   const table = useReactTable({
     data,
     columns,
-    onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    onPaginationChange: setPagination,
     state: {
-      columnFilters,
+      pagination,
     },
   });
 
@@ -154,11 +159,11 @@ const HelpDesk = () => {
                 </tr>
               ))}
             </thead>
-            <tbody>
+            <tbody className="divide-y">
               {table.getRowModel().rows.map((row) => (
                 <tr key={row.id}>
                   {row.getVisibleCells().map((cell, i) => (
-                    <td key={cell.id} className="p-4">
+                    <td key={cell.id} className="px-4 py-8">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
@@ -185,6 +190,27 @@ const HelpDesk = () => {
               ))}
             </tfoot>
           </table>
+        </div>
+      )}
+      {data && (
+        <div className="flex justify-end items-center gap-2">
+          <button
+            className="rounded-md py-2 px-4 bg-oohpoint-primary-2 hover:bg-oohpoint-primary-3 text-white disabled:bg-neutral-300 disabled:text-neutral-500"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+          >
+            Previous
+          </button>
+          <div className="flex items-center justify-center p-2 px-4 rounded-md text-white aspect-square bg-oohpoint-primary-2">
+            <strong>{table.getState().pagination.pageIndex + 1}</strong>
+          </div>
+          <button
+            className="rounded-md py-2 px-4 bg-oohpoint-primary-2 hover:bg-oohpoint-primary-3 text-white disabled:bg-neutral-300 disabled:text-neutral-500"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+          >
+            Next
+          </button>
         </div>
       )}
     </div>

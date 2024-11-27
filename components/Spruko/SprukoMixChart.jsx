@@ -47,16 +47,18 @@ const SprukoMixChart = () => {
     console.log("Found Campaigns");
 
     const monthlyData = Array.from({ length: 12 }, (_, i) => ({
-      month: new Date(0, i).toLocaleString('default', { month: 'short' }), // Get month names (Jan, Feb, ...)
+      month: new Date(0, i).toLocaleString("default", { month: "short" }), // Get month names (Jan, Feb, ...)
       closed: 0,
       active: 0,
       upcoming: 0,
     }));
 
-    campaigns.forEach(campaign => {
+    campaigns.forEach((campaign) => {
       const status = getStatus(campaign.startDate, campaign.endDate);
-      const createdAtMonth = new Date(campaign.createdAt.seconds * 1000).getMonth();
-      
+      const createdAtMonth = new Date(
+        campaign.createdAt.seconds * 1000
+      ).getMonth();
+
       if (status === "Closed") {
         monthlyData[createdAtMonth].closed += 1;
       } else if (status === "Active") {
@@ -92,6 +94,7 @@ const SprukoMixChart = () => {
       ))}
     </div>
   );
+  console.log('MAIN DASHBOARD',data);
 
   return (
     <div className="bg-white text-xs shadow rounded-lg col-span-2 row-span-2 min-w-[15rem]">

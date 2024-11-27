@@ -41,7 +41,7 @@ const ModalDetails = ({ data, refresh }) => {
       </div>
       {open && (
         <>
-          <div className="absolute inset-0 bg-white/50 z-10 h-screen overflow-hidden grid place-content-center">
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm z-10 h-screen overflow-hidden grid place-content-center">
             <div className="m-auto bg-white p-6 rounded-xl shadow-lg w-full max-w-md max-h-[512px] border overflow-hidden">
               <h2 className="text-lg font-bold mb-4">
                 Query Details - {data.queryId}

@@ -1,7 +1,4 @@
 import { useEffect, useState } from "react";
-import Card from "@/components/Card";
-import GradientBarChart from "@/components/BarChart";
-import SimpleLineChart from "@/components/LineChart";
 import {
   MdMoney,
   MdOutlineFormatTextdirectionRToL,
@@ -9,9 +6,22 @@ import {
 } from "react-icons/md";
 import { IoMdQrScanner } from "react-icons/io";
 import dynamic from "next/dynamic";
-import CampaignCompletionCircle from "@/components/RadialChart";
 import PieChartNew from "@/components/PieChartNew";
 import { X } from "lucide-react";
+import SprukoCard from "@/components/Spruko/SprukoCard";
+import { AiOutlineStock } from "react-icons/ai";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  CartesianGrid,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  Rectangle,
+} from "recharts";
 
 const MapLocation = dynamic(() => import("@/components/MapLocation"), {
   ssr: false, // This will disable server-side rendering for the map
@@ -94,33 +104,51 @@ const CampaignDetail = ({ data }) => {
           <div className="flex flex-col gap-6 bg-oohpoint-grey-200 p-6 rounded-lg h-full overflow-y-auto">
             {/* Campaign Overview Cards */}
             <div className="grid md:grid-cols-4 gap-6">
-              <Card
-                head="Total Scans"
-                count={`+${data.ipAddress?.length || 0}`}
+              <SprukoCard
+                title="Total Scans"
+                value={`${data.ipAddress?.length}`}
+                increase={`+${data.ipAddress?.length}`}
+                color="text-green-500"
+                iconColor="text-purple-500"
                 Icon={MdQrCodeScanner}
-                info="+22 from last month"
-                bgColor="green"
+                bgColor="bg-purple-100"
+                lineColor="purple"
+                lineData={hourlyScansData}
               />
-              <Card
-                head="Unique Scans"
-                count={`+${data.locationIp?.length || 0}`}
+              <SprukoCard
+                title="Unique Scans"
+                value={`${data.locationIp?.length || 0}`}
+                increase={`+${data.locationIp?.length}`}
+                color="text-green-500"
+                iconColor="text-green-500"
                 Icon={IoMdQrScanner}
-                info="-64 from last month"
-                bgColor="red"
+                bgColor="bg-green-100"
+                lineColor="green"
+                lineData={hourlyScansData}
               />
-              <Card
-                head="Total Redirects"
-                count={`+${data.redirects || 0}`}
+              <SprukoCard
+                title="Total Redirects"
+                value={`${data.redirects || 0}`}
+                increase={`+${data.redirects || 0}`}
+                color="text-green-500"
+                iconColor="text-red-500"
                 Icon={MdOutlineFormatTextdirectionRToL}
-                info="+22"
+                bgColor="bg-red-100"
+                lineColor="red"
+                lineData={hourlyScansData}
               />
-              <Card
-                head="Total Investment"
-                count={`Rs. ${data.campaignBudget}`}
+              <SprukoCard
+                title="Total Investment"
+                value={`Rs.${data.campaignBudget}`}
+                // increase={`+${campaignsData.increase}`}
+                color="text-green-500"
+                iconColor="text-blue-500"
                 Icon={MdMoney}
+                bgColor="bg-blue-100"
+                lineColor="blue"
+                lineData={hourlyScansData}
               />
             </div>
-
             <div className="grid md:grid-cols-6 gap-6">
               <GradientBarChart
                 head="Distribution of Scans"
@@ -143,35 +171,37 @@ const CampaignDetail = ({ data }) => {
               />
               {locations.length > 0 && <MapLocation locations={locations} />}
             </div>
-
-            <div className="flex justify-center items-center gap-8 flex-col bg-white rounded-lg w-full p-8">
-              <h2 className="text-xl w-full text-oohpoint-primary-2 text-left">
+            <div className="space-y-2">
+              <h2 className="text-2xl w-full text-oohpoint-primary-2">
                 State-wise distribution
               </h2>
-              <div className="flex justify-between gap-4 items-start w-full">
-                <div className="rounded-3xl w-1/3 h-full border border-oohpoint-grey-300 bg-oohpoint-grey-200 text-oohpoint-grey-300">
-                  {data.cities && (
-                    <table className=" w-full border-collapse">
-                      <thead>
-                        <tr className=" border-b  border-primary p-4">
-                          <th className=" p-4 text-start">States</th>
-                          <th className=" p-4 text-start">Scans</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {Object.entries(data.cities).map(([key, value], i) => (
-                          <tr className={` p-4`}>
-                            <td className=" p-4 text-start">{key}</td>
-                            <td className=" p-4 text-start">{value}</td>
+              <div className="flex justify-center items-center gap-8 flex-col bg-white rounded-lg w-full p-8">
+                <div className="flex items-center gap-6 w-full">
+                  <div className="w-1/2 h-full mx-auto rounded-lg border border-oohpoint-grey-300 bg-oohpoint-grey-200 text-oohpoint-grey-500">
+                    {data.cities && (
+                      <table className="w-full">
+                        <thead>
+                          <tr className=" border-b border-primary p-4">
+                            <th className=" p-4 text-start">States</th>
+                            <th className=" p-4 text-start">Scans</th>
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  )}
-                </div>
-
-                <div className="w-1/2 h-full bg-white flex p-4 rounded-xl justify-center items-center">
-                  {data.cities && <PieChartNew data={data.cities} />}
+                        </thead>
+                        <tbody className="divide-y">
+                          {Object.entries(data.cities).map(
+                            ([key, value], i) => (
+                              <tr className={`p-4`}>
+                                <td className=" p-4 text-start">{key}</td>
+                                <td className=" p-4 text-start">{value}</td>
+                              </tr>
+                            )
+                          )}
+                        </tbody>
+                      </table>
+                    )}
+                  </div>
+                  <div className="w-1/2 h-full mx-auto bg-white flex p-4 rounded-xl justify-center items-center">
+                    {data.cities && <PieChartNew data={data.cities} />}
+                  </div>
                 </div>
               </div>
             </div>
@@ -179,6 +209,138 @@ const CampaignDetail = ({ data }) => {
         </div>
       )}
     </>
+  );
+};
+
+const SimpleLineChart = ({ head, Icon, data }) => (
+  <div className="col-span-2 bg-white rounded-lg flex flex-col justify-between items-center p-6">
+    <div className="flex justify-between items-start w-full">
+      <div className="flex flex-col justify-start items-start gap-2">
+        <h4 className="text-oohpoint-primary-2 font-medium">{head}</h4>
+      </div>
+      {Icon ? (
+        <AiOutlineStock className="text-3xl text-blue-500" />
+      ) : (
+        <AiOutlineStock className="text-3xl text-red-500" />
+      )}
+    </div>
+    <ResponsiveContainer width="100%" height={190}>
+      <LineChart data={data} margin={{ left: -20, right: 20 }}>
+        {/* Define a gradient for the line */}
+        <defs>
+          <linearGradient id="gradient" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stopColor="#CABAE4" />
+            <stop offset="100%" stopColor="#9B43AF" />
+          </linearGradient>
+        </defs>
+
+        {/* Only horizontal grid lines */}
+        <CartesianGrid strokeDasharray="1 1" vertical={false} />
+
+        <XAxis dataKey="name" />
+        <YAxis />
+        <Tooltip />
+
+        {/* Use gradient for the line stroke */}
+        <Line
+          type="basis"
+          dataKey="value"
+          stroke="#3b82f6"
+          strokeWidth={4}
+          dot={false}
+        />
+      </LineChart>
+    </ResponsiveContainer>
+  </div>
+);
+
+const GradientBarChart = ({
+  lightColor,
+  darkColor,
+  head,
+  count,
+  Icon,
+  data,
+}) => {
+  // Generate a unique id for each chart's gradient
+  const gradientId = `gradient-${Math.random().toString(36).substr(2, 9)}`;
+
+  return (
+    <div className="bg-white rounded-lg flex flex-col justify-center items-center p-6">
+      <div className="flex justify-between items-start w-full">
+        <div className="flex flex-col justify-start items-start gap-2 pb-2">
+          <h4 className="text-oohpoint-primary-2 font-medium">{head}</h4>
+          <p className="text-oohpoint-primary-3 text-3xl font-bold">{count}</p>
+        </div>
+        {Icon ? (
+          <AiOutlineStock className="text-3xl text-yellow-500" />
+        ) : (
+          <AiOutlineStock className="text-3xl text-red-500" />
+        )}
+      </div>
+      <ResponsiveContainer width="100%" height={140}>
+        <BarChart data={data}>
+          <defs>
+            <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%" stopColor={darkColor} stopOpacity={1} />
+              <stop offset="95%" stopColor={lightColor} stopOpacity={1} />
+            </linearGradient>
+          </defs>
+          <Tooltip />
+          <XAxis dataKey="name" hide={true} />
+          <Bar
+            dataKey="value"
+            fill="#facc15"
+            barSize={20}
+            background={<Rectangle fill="#F2F0F5" radius={[10, 10, 10, 10]} />}
+          />
+        </BarChart>
+      </ResponsiveContainer>
+    </div>
+  );
+};
+
+const CampaignCompletionCircle = ({ completedPercentage }) => {
+  const validCompletedPercentage = Math.min(
+    100,
+    Math.max(0, completedPercentage)
+  ); // Ensure percentage is between 0-100
+
+  return (
+    <div className="flex justify-center items-center p-4 bg-white rounded-lg h-full">
+      <div className="relative">
+        {/* Circle background */}
+        <svg className="w-40 h-40">
+          <circle
+            cx="50%"
+            cy="50%"
+            r="60"
+            strokeWidth="15"
+            className="stroke-gray-200 fill-none"
+          />
+          {/* Dynamic circle progress */}
+          <circle
+            cx="50%"
+            cy="50%"
+            r="60"
+            strokeWidth="15"
+            className="stroke-oohpoint-tertiary-1 fill-none transition-all duration-500"
+            strokeDasharray="377"
+            strokeDashoffset={377 - (377 * validCompletedPercentage) / 100}
+            strokeLinecap="square"
+          />
+        </svg>
+        {/* Percentage in the center */}
+        <div className="absolute top-[-0.8rem] left-[0.2rem] w-full h-full flex justify-center items-center">
+          <span className="text-2xl font-bold text-center my-auto">
+            {validCompletedPercentage.toFixed(1)}%
+          </span>
+        </div>
+        <h3 className=" text-center font-semibold text-oohpoint-primary-2 text-lg">
+          Completion
+        </h3>
+      </div>
+    </div>
   );
 };
 

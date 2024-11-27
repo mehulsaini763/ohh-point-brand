@@ -48,7 +48,7 @@ const SprukoPieChart = ({ totalScans, uniqueScans }) => {
         alignItems: "center",
         gap: "40px",
       }}
-      className=" bg-white col-span-2 row-span-2 rounded-lg shadow relative min-w-[15rem]"
+      className="bg-white col-span-2 row-span-2 rounded-lg shadow relative min-w-[15rem]"
     >
       <div className=" absolute top-[calc(50%-1.5rem)] text-center">
         <p className=" text-xs">Total Scans</p>
