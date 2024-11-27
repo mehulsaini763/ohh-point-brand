@@ -74,13 +74,15 @@ const CampaignDetail = ({ data }) => {
 
   return (
     <>
-      <button
-        type="button"
-        className="text-purple-700 bg-purple-300 font-semibold text-xs px-2 py-1 rounded-md w-fit"
-        onClick={() => setOpen(true)}
-      >
-        Insights
-      </button>
+      <div className="flex justify-center items-center">
+        <button
+          type="button"
+          className="bg-purple-700 text-white font-semibold text-sm px-4 py-2 rounded-md w-fit"
+          onClick={() => setOpen(true)}
+        >
+          Insights
+        </button>
+      </div>
       {open && (
         <div className="absolute inset-0 bg-white/25 p-8 z-10 h-screen overflow-hidden">
           <button

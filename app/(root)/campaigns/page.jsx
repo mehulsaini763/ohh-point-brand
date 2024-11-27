@@ -79,8 +79,11 @@ const Campaigns = () => {
     {
       accessorKey: "status",
       header: "status",
-      cell: ({ row }) =>
-        getStatus(row.getValue("startDate"), row.getValue("endDate")),
+      cell: ({ row }) => (
+        <div className="flex justify-end">
+          {getStatus(row.getValue("startDate"), row.getValue("endDate"))}
+        </div>
+      ),
     },
     {
       accessorKey: "actions",
