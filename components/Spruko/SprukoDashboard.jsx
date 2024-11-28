@@ -331,7 +331,7 @@ const SprukoDashboard = () => {
                   </tr>
                 ))}
               </thead>
-              <tbody>
+              <tbody className="divide-y">
                 {table.getRowModel().rows.map((row) => (
                   <tr key={row.id}>
                     {row.getVisibleCells().map((cell, i) => (
