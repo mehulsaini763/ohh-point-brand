@@ -185,10 +185,11 @@ const SprukoDashboard = () => {
   // };
 
   const columns = [
-    { accessorKey: "id", header: "campaign id" },
+    { accessorKey: "id", header: <div className="text-left">campaign id</div> },
     {
       accessorKey: "campaignName",
-      header: "campaign name",
+      header: <div className="text-left">campaign name</div>,
+
       cell: ({ row }) => (
         <div className="flex items-center gap-2">
           <Image
@@ -203,31 +204,48 @@ const SprukoDashboard = () => {
     },
     {
       accessorKey: "ipAddress",
-      header: "impressions",
-      cell: ({ row }) => row.getValue("ipAddress")?.length || 0,
+      header: <div className="text-center">impressions</div>,
+      cell: ({ row }) => (
+        <div className="text-center">
+          {row.getValue("ipAddress")?.length || 0}
+        </div>
+      ),
     },
     {
       accessorKey: "startDate",
-      header: "start Date",
-      cell: ({ row }) =>
-        moment
-          .unix(row.getValue("startDate")?.seconds)
-          .format("DD/MM/YY hh:mm A"),
+      header: <div className="text-center">start Date</div>,
+      cell: ({ row }) => (
+        <div className="text-center">
+          {moment.unix(row.getValue("startDate")?.seconds).format("DD/MM/YY")}
+        </div>
+      ),
     },
     {
       accessorKey: "endDate",
-      header: "end Date",
-      cell: ({ row }) =>
-        moment
-          .unix(row.getValue("endDate")?.seconds)
-          .format("DD/MM/YY hh:mm A"),
+      header: <div className="text-center">end Date</div>,
+      cell: ({ row }) => (
+        <div className="text-center">
+          {moment.unix(row.getValue("endDate")?.seconds).format("DD/MM/YY")}
+        </div>
+      ),
     },
     {
       accessorKey: "status",
-      header: "status",
+      header: <div className="text-center">status</div>,
       cell: ({ row }) => (
         <div className="text-center">
           {getStatus(row.getValue("startDate"), row.getValue("endDate"))}
+        </div>
+      ),
+    },
+    {
+      header: "qr code",
+      cell: ({ row }) => (
+        <div className="text-center">
+          <QRCodeGenerator
+            value={`https://user-ooh-point.vercel.app/campaign/${row.original.campaignId}
+          )}-${user.vendorId}`}
+          />
         </div>
       ),
     },
