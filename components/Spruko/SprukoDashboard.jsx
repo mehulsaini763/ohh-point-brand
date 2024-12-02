@@ -241,17 +241,6 @@ const SprukoDashboard = () => {
     {
       header: "qr code",
       cell: ({ row }) => (
-        <div className="text-center">
-          <QRCodeGenerator
-            value={`https://user-ooh-point.vercel.app/campaign/${row.original.campaignId}
-          )}-${user.vendorId}`}
-          />
-        </div>
-      ),
-    },
-    {
-      header: "qr code",
-      cell: ({ row }) => (
         <div className="flex justify-end">
           <QRCodeGenerator
             value={`https://user-ooh-point.vercel.app/campaign/${row.original.campaignId}

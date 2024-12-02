@@ -20,7 +20,6 @@ const Header = () => {
         toast.error("Log in first");
         router.push("/sign-in"); // Adjust the route as per your application
       }
-      console.log(user);
     });
 
     // Clean up subscription on unmount

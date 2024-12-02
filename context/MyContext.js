@@ -3,7 +3,7 @@ import React, { createContext, useState } from "react";
 import { auth } from "@/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 const MyContext = createContext();
@@ -12,6 +12,7 @@ const MyProvider = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [user, setUser] = useState(null);
   const router = useRouter();
+  const pathname = usePathname();
   const [campaigns, setCampaigns] = useState([]);
   const [uid, setUid] = useState("");
   const [isHovered, setIsHovered] = useState(false);
@@ -69,7 +70,7 @@ const MyProvider = ({ children }) => {
     }
   };
 
-  if (!user) return null;
+  if (!user && pathname != "/sign-in") return null;
 
   return (
     <MyContext.Provider
