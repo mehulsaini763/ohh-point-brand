@@ -1,10 +1,11 @@
 "use client";
 import React, { createContext, useState } from "react";
-import { auth } from "@/firebase";
+import { auth, db } from "@/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import { doc, getDoc } from "firebase/firestore";
 
 const MyContext = createContext();
 
@@ -14,6 +15,7 @@ const MyProvider = ({ children }) => {
   const router = useRouter();
   const pathname = usePathname();
   const [campaigns, setCampaigns] = useState([]);
+  const [vendors, setVendors] = useState([]);
   const [uid, setUid] = useState("");
   const [isHovered, setIsHovered] = useState(false);
 
@@ -65,8 +67,25 @@ const MyProvider = ({ children }) => {
       );
 
       setCampaigns(brandCampaigns.reverse());
+      fetchVendors(brandCampaigns.reverse());
     } catch (error) {
       console.error("Error fetching campaigns:", error);
+    }
+  };
+
+  const fetchVendors = async (campaigns) => {
+    try {
+      const vendors = [];
+      for (const campaign of campaigns) {
+        for (const vendor of campaign.vendors) {
+          const docRef = doc(db, "vendors", vendor.vendorId);
+          const docSnap = await getDoc(docRef);
+          vendors.push(docSnap.data());
+        }
+      }
+      setVendors(vendors);
+    } catch (error) {
+      console.error("Error fetching vendors:", error);
     }
   };
 
@@ -82,6 +101,7 @@ const MyProvider = ({ children }) => {
         user,
         setUser,
         campaigns,
+        vendors,
         setCampaigns,
         fetchCampaigns,
         fetchUser,
