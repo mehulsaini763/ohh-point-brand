@@ -70,12 +70,12 @@ const SignIn = () => {
           </div>
         </div>
         {/* Content */}
-        <div className="md:w-3/5 ">
+        <div className="md:w-3/5">
           {/* Logo */}
 
           {/* Form Container */}
           <div className="bg-white h-screen w-full md:rounded-tl-[48px] flex justify-center items-center">
-            <div className="w-96">
+            <div className="w-96 p-8 md:py-8">
               <h3 className="font-bold text-3xl py-2">Sign In</h3>
               <p className="text-sm font-bold text-[#666666]">
                 Please fill in your unique admin login details below
@@ -83,7 +83,7 @@ const SignIn = () => {
 
               {/* Form */}
               <form
-                className="flex flex-col gap-4 py-8"
+                className="flex flex-col gap-4"
                 onSubmit={handleSubmit}
               >
                 {/* Email Field */}

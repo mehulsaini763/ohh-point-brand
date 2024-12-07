@@ -1,3 +1,4 @@
+import Modal from "@/components/Modal";
 import { MyContext } from "@/context/MyContext";
 import { db } from "@/firebase";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
@@ -58,55 +59,55 @@ const ModalCreateIssue = ({ refresh }) => {
       >
         Raise an Issue
       </button>
-      {open && (
-        <div className="fixed inset-0 bg-black/50 z-10 flex justify-center items-center transition-all backdrop-blur-sm">
-          <div className="bg-white p-6 px-10 rounded-2xl shadow-lg w-full max-w-md">
-            <h2 className="text-lg font-bold mb-4">Raise an Issue</h2>
+      <Modal
+        className="bg-white p-6 px-10 rounded-2xl shadow-lg w-full max-w-md"
+        open={open}
+        close={() => setOpen(false)}
+      >
+        <h2 className="text-lg font-bold mb-4">Raise an Issue</h2>
 
-            {/* Category Dropdown */}
-            <select
-              className="w-full border rounded-3xl p-4 mb-4 bg-oohpoint-grey-200 font-light"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-            >
-              <option value="">Select a Category</option>
-              <option value="Account Related">Account related</option>
-              <option value="Payment Issue">Payment Issue</option>
-              <option value="Technical Issue">Technical Issue</option>
-              <option value="Other">Other</option>
-            </select>
+        {/* Category Dropdown */}
+        <select
+          className="w-full border rounded-3xl p-4 mb-4 bg-oohpoint-grey-200 font-light"
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+        >
+          <option value="">Select a Category</option>
+          <option value="Account Related">Account related</option>
+          <option value="Payment Issue">Payment Issue</option>
+          <option value="Technical Issue">Technical Issue</option>
+          <option value="Other">Other</option>
+        </select>
 
-            <textarea
-              className="w-full border rounded-3xl p-4 mb-4 bg-oohpoint-grey-200 font-light"
-              rows="4"
-              placeholder="Describe your issue"
-              value={issueMessage}
-              onChange={(e) => setIssueMessage(e.target.value)}
-            ></textarea>
-            <div className="flex justify-end space-x-2">
-              <button
-                className="bg-gray-500 text-white py-2 px-6 rounded-xl hover:bg-gray-600"
-                onClick={() => {
-                  setOpen(false);
-                  setIssueMessage("");
-                  setCategory("");
-                }}
-                disabled={loading}
-              >
-                Cancel
-              </button>
-              <button
-                className="flex items-center gap-2 bg-oohpoint-primary-2 text-white py-2 px-6 rounded-xl hover:bg-oohpoint-primary-3"
-                onClick={handleSubmitIssue}
-                disabled={loading}
-              >
-                {loading && <Loader2 color="white" className="animate-spin" />}{" "}
-                Submit
-              </button>
-            </div>
-          </div>
+        <textarea
+          className="w-full border rounded-3xl p-4 mb-4 bg-oohpoint-grey-200 font-light"
+          rows="4"
+          placeholder="Describe your issue"
+          value={issueMessage}
+          onChange={(e) => setIssueMessage(e.target.value)}
+        ></textarea>
+        <div className="flex justify-end space-x-2">
+          <button
+            className="bg-gray-500 text-white py-2 px-6 rounded-xl hover:bg-gray-600"
+            onClick={() => {
+              setOpen(false);
+              setIssueMessage("");
+              setCategory("");
+            }}
+            disabled={loading}
+          >
+            Cancel
+          </button>
+          <button
+            className="flex items-center gap-2 bg-oohpoint-primary-2 text-white py-2 px-6 rounded-xl hover:bg-oohpoint-primary-3"
+            onClick={handleSubmitIssue}
+            disabled={loading}
+          >
+            {loading && <Loader2 color="white" className="animate-spin" />}{" "}
+            Submit
+          </button>
         </div>
-      )}
+      </Modal>
     </>
   );
 };

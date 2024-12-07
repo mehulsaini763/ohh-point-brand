@@ -92,9 +92,9 @@ const PieChartNew = ({ data }) => {
       </Pie>
       <Tooltip />
       <Legend
-        layout="vertical"
+        layout='horizontal'
         align="right"
-        verticalAlign="middle"
+        verticalAlign='bottom'
       />
     </PieChart>
   );

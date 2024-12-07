@@ -22,6 +22,7 @@ import {
   Bar,
   Rectangle,
 } from "recharts";
+import Modal from "@/components/Modal";
 
 const MapLocation = dynamic(() => import("@/components/MapLocation"), {
   ssr: false, // This will disable server-side rendering for the map
@@ -93,127 +94,113 @@ const CampaignDetail = ({ data }) => {
           Insights
         </button>
       </div>
-      {open && (
-        <div className="absolute inset-0 bg-black/50 backdrop-blur-sm p-8 z-10 h-screen overflow-hidden">
-          <button
-            className="absolute top-4 right-4 bg-white shadow-lg p-4 rounded-lg border"
-            onClick={() => setOpen(false)}
-          >
-            <X size={24} />
-          </button>
-          <div className="flex flex-col gap-6 bg-oohpoint-grey-200 p-6 rounded-lg h-full overflow-y-auto">
-            {/* Campaign Overview Cards */}
-            <div className="grid md:grid-cols-4 gap-6">
-              <SprukoCard
-                title="Total Scans"
-                value={`${data.ipAddress?.length}`}
-                increase={`+${data.ipAddress?.length}`}
-                color="text-green-500"
-                iconColor="text-purple-500"
-                Icon={MdQrCodeScanner}
-                bgColor="bg-purple-100"
-                lineColor="purple"
-                lineData={hourlyScansData}
-              />
-              <SprukoCard
-                title="Unique Scans"
-                value={`${data.locationIp?.length || 0}`}
-                increase={`+${data.locationIp?.length}`}
-                color="text-green-500"
-                iconColor="text-green-500"
-                Icon={IoMdQrScanner}
-                bgColor="bg-green-100"
-                lineColor="green"
-                lineData={hourlyScansData}
-              />
-              <SprukoCard
-                title="Total Redirects"
-                value={`${data.redirects || 0}`}
-                increase={`+${data.redirects || 0}`}
-                color="text-green-500"
-                iconColor="text-red-500"
-                Icon={MdOutlineFormatTextdirectionRToL}
-                bgColor="bg-red-100"
-                lineColor="red"
-                lineData={hourlyScansData}
-              />
-              <SprukoCard
-                title="Total Investment"
-                value={`Rs.${data.campaignBudget}`}
-                // increase={`+${campaignsData.increase}`}
-                color="text-green-500"
-                iconColor="text-blue-500"
-                Icon={MdMoney}
-                bgColor="bg-blue-100"
-                lineColor="blue"
-                lineData={hourlyScansData}
-              />
-            </div>
-            <div className="grid md:grid-cols-6 gap-6">
-              <GradientBarChart
-                head="Distribution of Scans"
-                count={`+${data.ipAddress?.length || 0}`}
-                Icon={true}
-                data={monthlyScans}
-                darkColor="#B77DC4"
-                lightColor="#F7D5FF"
-              />
-              <CampaignCompletionCircle
-                completedPercentage={
-                  (data.locationIp?.length / data.moq) * 100 || 0
-                }
-              />
-              <SimpleLineChart
-                head="Hourly Distribution of Scans"
-                count={`+${data.ipAddress?.length || 0}`}
-                Icon={true}
-                data={hourlyScansData}
-              />
-              {locations.length > 0 && <MapLocation locations={locations} />}
-            </div>
-            <div className="space-y-2">
-              <h2 className="text-2xl w-full text-oohpoint-primary-2">
-                State-wise distribution
-              </h2>
-              <div className="flex justify-center items-center gap-8 flex-col bg-white rounded-lg w-full p-8">
-                <div className="flex items-center gap-6 w-full">
-                  <div className="w-1/2 h-full mx-auto rounded-lg border border-oohpoint-grey-300 bg-oohpoint-grey-200 text-oohpoint-grey-500">
-                    {data.cities && (
-                      <table className="w-full">
-                        <thead>
-                          <tr className=" border-b border-primary p-4">
-                            <th className=" p-4 text-start">States</th>
-                            <th className=" p-4 text-start">Scans</th>
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y">
-                          {Object.entries(data.cities).map(
-                            ([key, value], i) => (
-                              <tr className={`p-4`}>
-                                <td className=" p-4 text-start">{key}</td>
-                                <td className=" p-4 text-start">{value}</td>
-                              </tr>
-                            )
-                          )}
-                        </tbody>
-                      </table>
-                    )}
-                  </div>
-                  <div className="w-1/2 h-full mx-auto bg-white flex p-4 rounded-xl justify-center items-center">
-                    {data.cities && <PieChartNew data={data.cities} />}
-                  </div>
-                </div>
+      <Modal
+        className="bg-oohpoint-grey-200 grid grid-cols-1 md:grid-cols-4 gap-4 p-4 md:gap-6 md:p-6 rounded-lg h-full overflow-y-auto"
+        open={open}
+        close={() => setOpen(false)}
+      >
+        {/* Campaign Overview Cards */}
+        <SprukoCard
+          title="Total Scans"
+          value={`${data.ipAddress?.length}`}
+          increase={`+${data.ipAddress?.length}`}
+          color="text-green-500"
+          iconColor="text-purple-500"
+          Icon={MdQrCodeScanner}
+          bgColor="bg-purple-100"
+          lineColor="purple"
+          lineData={hourlyScansData}
+        />
+        <SprukoCard
+          title="Unique Scans"
+          value={`${data.locationIp?.length || 0}`}
+          increase={`+${data.locationIp?.length}`}
+          color="text-green-500"
+          iconColor="text-green-500"
+          Icon={IoMdQrScanner}
+          bgColor="bg-green-100"
+          lineColor="green"
+          lineData={hourlyScansData}
+        />
+        <SprukoCard
+          title="Total Redirects"
+          value={`${data.redirects || 0}`}
+          increase={`+${data.redirects || 0}`}
+          color="text-green-500"
+          iconColor="text-red-500"
+          Icon={MdOutlineFormatTextdirectionRToL}
+          bgColor="bg-red-100"
+          lineColor="red"
+          lineData={hourlyScansData}
+        />
+        <SprukoCard
+          title="Total Investment"
+          value={`Rs.${data.campaignBudget}`}
+          // increase={`+${campaignsData.increase}`}
+          color="text-green-500"
+          iconColor="text-blue-500"
+          Icon={MdMoney}
+          bgColor="bg-blue-100"
+          lineColor="blue"
+          lineData={hourlyScansData}
+        />
+        <GradientBarChart
+          head="Distribution of Scans"
+          count={`+${data.ipAddress?.length || 0}`}
+          Icon={true}
+          data={monthlyScans}
+          darkColor="#B77DC4"
+          lightColor="#F7D5FF"
+        />
+        <CampaignCompletionCircle
+          completedPercentage={(data.locationIp?.length / data.moq) * 100 || 0}
+        />
+        <SimpleLineChart
+          head="Hourly Distribution of Scans"
+          count={`+${data.ipAddress?.length || 0}`}
+          Icon={true}
+          data={hourlyScansData}
+        />
+        {locations.length > 0 && <MapLocation locations={locations} />}
+        <div className="col-span-full">
+          <h2 className="text-2xl w-full text-oohpoint-primary-2 p-4">
+            State-wise distribution
+          </h2>
+          <div className="flex justify-center items-center gap-8 flex-col bg-white rounded-lg w-full p-8">
+            <div className="flex flex-col md:flex-row items-center gap-6 w-full">
+              <div className="md:w-1/2 h-full mx-auto rounded-lg border border-oohpoint-grey-300 bg-oohpoint-grey-200 text-oohpoint-grey-500">
+                {data.cities && (
+                  <table className="w-full">
+                    <thead>
+                      <tr className=" border-b border-primary p-4">
+                        <th className=" p-4 text-start">States</th>
+                        <th className=" p-4 text-start">Scans</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y">
+                      {Object.entries(data.cities).map(([key, value], i) => (
+                        <tr className={`p-4`}>
+                          <td className=" p-4 text-start">{key}</td>
+                          <td className=" p-4 text-start">{value}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
+              </div>
+              <div className="md:w-1/2 h-full mx-auto bg-white flex md:p-4 rounded-xl justify-center items-center overflow-x-auto w-full">
+                {data.cities && <PieChartNew data={data.cities} />}
               </div>
             </div>
           </div>
         </div>
-      )}
+      </Modal>
     </>
   );
 };
 
 const SimpleLineChart = ({ head, Icon, data }) => (
-  <div className="col-span-2 bg-white rounded-lg flex flex-col justify-between items-center p-6">
+  <div className="md:col-span-2 bg-white rounded-lg flex flex-col justify-between items-center p-6">
     <div className="flex justify-between items-start w-full">
       <div className="flex flex-col justify-start items-start gap-2">
         <h4 className="text-oohpoint-primary-2 font-medium">{head}</h4>

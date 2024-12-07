@@ -24,7 +24,6 @@ const MapLocation = dynamic(() => import("../MapLocation"), {
 const SprukoDashboard = () => {
   const { campaigns, vendors, user } = useContext(MyContext);
   const [locations, setLocations] = useState([]);
-  console.log(vendors);
 
   function convertTimestampToDate(timestamp) {
     return new Date(timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000);

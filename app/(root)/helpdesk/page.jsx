@@ -124,7 +124,7 @@ const HelpDesk = () => {
           <input
             type="text"
             placeholder="Search by Category"
-            className="px-4 py-2 rounded-lg"
+            className="px-4 py-2 rounded-lg w-48"
             value={table.getColumn("category")?.getFilterValue() ?? ""}
             onChange={(event) =>
               table.getColumn("category")?.setFilterValue(event.target.value)

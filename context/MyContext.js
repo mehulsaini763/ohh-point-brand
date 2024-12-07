@@ -18,6 +18,7 @@ const MyProvider = ({ children }) => {
   const [vendors, setVendors] = useState([]);
   const [uid, setUid] = useState("");
   const [isHovered, setIsHovered] = useState(false);
+  const [authUser, setAuthUser] = useState(false);
 
   useEffect(() => {
     // Check if user is already logged in
@@ -26,6 +27,7 @@ const MyProvider = ({ children }) => {
         toast.error("Log in first");
         router.push("/sign-in"); // Adjust the route as per your application
       } else {
+        setAuthUser(user);
         fetchUser(user.uid);
         setUid(user.uid);
       }
@@ -89,7 +91,7 @@ const MyProvider = ({ children }) => {
     }
   };
 
-  if (!user && pathname != "/sign-in") return null;
+  if (!authUser && pathname != "/sign-in") return null;
 
   return (
     <MyContext.Provider

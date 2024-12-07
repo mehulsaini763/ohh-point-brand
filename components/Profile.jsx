@@ -11,7 +11,7 @@ const Profile = () => {
   const inputClassName =
     "mt-1 block w-full rounded-md py-2 px-4 bg-oohpoint-grey-200 font-light w-[20rem]";
   return (
-    <div className="bg-oohpoint-grey-200 w-full h-full flex flex-col gap-6 p-6">
+    <div className="bg-oohpoint-grey-200 w-full h-full flex flex-col gap-4 md:gap-6 p-4 md:p-6">
       <div className=" flex justify-between items-center w-full">
         <div className="flex flex-col items-start justify-center ">
           <h1 className="text-oohpoint-grey-500 font-bold text-4xl">

@@ -122,9 +122,9 @@ const Campaigns = () => {
   });
 
   return (
-    <div className="bg-oohpoint-grey-200 flex flex-col p-6 gap-6 w-full">
-      <div className="flex flex-col md:items-center md:flex-row md:justify-between gap-6">
-        <div className="space-y-2">
+    <div className="bg-oohpoint-grey-200 flex flex-col p-4 gap-4 md:p-6 md:gap-6 w-full">
+      <div className="flex flex-col md:items-center md:flex-row md:justify-between gap-4 md:gap-6">
+        <div>
           <h1 className=" text-oohpoint-grey-500 font-bold text-4xl">
             Campaigns
           </h1>
