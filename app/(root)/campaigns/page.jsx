@@ -154,65 +154,71 @@ const Campaigns = () => {
           }
         />
       </div>
-      {campaigns.length == 0 ? (
+      {campaigns ? (
+        campaigns.length == 0 ? (
+          <div className="col-span-full  rounded-lg h-48 bg-white flex flex-col justify-center items-center">
+            No Data Available
+          </div>
+        ) : (
+          <div className="w-full overflow-x-auto rounded-lg">
+            <table className="bg-white rounded-lg shadow-sm w-full ">
+              <thead>
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <tr key={headerGroup.id}>
+                    {headerGroup.headers.map((header, i) => (
+                      <th
+                        key={header.id}
+                        className={
+                          "uppercase p-4 border-b font-medium text-neutral-700"
+                        }
+                      >
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                      </th>
+                    ))}
+                  </tr>
+                ))}
+              </thead>
+              <tbody className="divide-y">
+                {table.getRowModel().rows.map((row) => (
+                  <tr key={row.id}>
+                    {row.getVisibleCells().map((cell, i) => (
+                      <td key={cell.id} className="px-4 py-8">
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+              <tfoot>
+                {table.getFooterGroups().map((footerGroup) => (
+                  <tr key={footerGroup.id}>
+                    {footerGroup.headers.map((header) => (
+                      <th key={header.id}>
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.footer,
+                              header.getContext()
+                            )}
+                      </th>
+                    ))}
+                  </tr>
+                ))}
+              </tfoot>
+            </table>
+          </div>
+        )
+      ) : (
         <div className="flex flex-col items-center justify-center rounded-md h-24">
           <Loader2 className="h-6 w-6 animate-spin" />
-        </div>
-      ) : (
-        <div className="w-full overflow-x-auto rounded-lg">
-          <table className="bg-white rounded-lg shadow-sm w-full ">
-            <thead>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <tr key={headerGroup.id}>
-                  {headerGroup.headers.map((header, i) => (
-                    <th
-                      key={header.id}
-                      className={
-                        "uppercase p-4 border-b font-medium text-neutral-700"
-                      }
-                    >
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </th>
-                  ))}
-                </tr>
-              ))}
-            </thead>
-            <tbody className="divide-y">
-              {table.getRowModel().rows.map((row) => (
-                <tr key={row.id}>
-                  {row.getVisibleCells().map((cell, i) => (
-                    <td key={cell.id} className="px-4 py-8">
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-            <tfoot>
-              {table.getFooterGroups().map((footerGroup) => (
-                <tr key={footerGroup.id}>
-                  {footerGroup.headers.map((header) => (
-                    <th key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.footer,
-                            header.getContext()
-                          )}
-                    </th>
-                  ))}
-                </tr>
-              ))}
-            </tfoot>
-          </table>
         </div>
       )}
       {campaigns.length != 0 && (

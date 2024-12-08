@@ -341,7 +341,7 @@ const SprukoDashboard = () => {
         <MapLocation locations={locations} />
       </div>
       {campaigns.length == 0 ? (
-        <div className="h-48 bg-white flex flex-col justify-center items-center">
+        <div className="col-span-full  rounded-lg h-48 bg-white flex flex-col justify-center items-center">
           No Data Available
         </div>
       ) : (

@@ -47,6 +47,7 @@ const MyProvider = ({ children }) => {
 
       const userData = await res.json();
       const data = userData.find((user) => user.uid === uid);
+      
       setUser(data);
       fetchCampaigns(data);
     } catch (error) {
@@ -67,6 +68,7 @@ const MyProvider = ({ children }) => {
       const brandCampaigns = campaignsData.filter(
         (campaign) => campaign.client === brand.brandId
       );
+console.log(brandCampaigns);
 
       setCampaigns(brandCampaigns.reverse());
       fetchVendors(brandCampaigns.reverse());
