@@ -10,12 +10,14 @@ import dynamic from "next/dynamic";
 import {
   flexRender,
   getCoreRowModel,
+  getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import QRCodeGenerator from "@/components/QRCode";
 import Image from "next/image";
 import moment from "moment";
 import Details from "@/app/(root)/campaigns/_components/Details";
+import CampaignDetail from "@/components/CampaignDetails";
 
 const MapLocation = dynamic(() => import("../MapLocation"), {
   ssr: false, // This will disable server-side rendering for the map
@@ -267,7 +269,7 @@ const SprukoDashboard = () => {
     {
       accessorKey: "actions",
       header: "",
-      cell: ({ row }) => <Details data={row.original} />,
+      cell: ({ row }) => <CampaignDetail campaign={row.original} />,
     },
   ];
 
@@ -275,6 +277,8 @@ const SprukoDashboard = () => {
     data: campaigns,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    state: { pagination: { pageIndex: 1, pageSize: 5 } },
   });
 
   return (

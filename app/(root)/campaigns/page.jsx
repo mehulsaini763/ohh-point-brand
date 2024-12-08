@@ -2,7 +2,7 @@
 
 import { useContext, useState } from "react";
 import { MyContext } from "@/context/MyContext";
-import Details from "./_components/Details";
+import Details from "@/components/CampaignDetails";
 import Image from "next/image";
 import moment from "moment";
 import {
@@ -116,7 +116,7 @@ const Campaigns = () => {
     {
       accessorKey: "actions",
       header: "",
-      cell: ({ row }) => <Details data={row.original} />,
+      cell: ({ row }) => <Details campaign={row.original} />,
     },
   ];
 
