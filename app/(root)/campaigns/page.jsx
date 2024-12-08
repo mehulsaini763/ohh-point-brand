@@ -13,9 +13,10 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { Loader2 } from "lucide-react";
+import QRCodeGenerator from "@/components/QRCode";
 
 const Campaigns = () => {
-  const { campaigns } = useContext(MyContext);
+  const { campaigns, user } = useContext(MyContext);
 
   // Function to get status of campaigns (Active, Upcoming, Closed)
   const getStatus = (startDate, endDate) => {
@@ -99,6 +100,17 @@ const Campaigns = () => {
       cell: ({ row }) => (
         <div className="flex justify-end">
           {getStatus(row.getValue("startDate"), row.getValue("endDate"))}
+        </div>
+      ),
+    },
+    {
+      header: "qr code",
+      cell: ({ row }) => (
+        <div className="flex justify-end">
+          <QRCodeGenerator
+            value={`https://user-ooh-point.vercel.app/campaign/${row.original.campaignId}
+          )}-${user.vendorId}`}
+          />
         </div>
       ),
     },
